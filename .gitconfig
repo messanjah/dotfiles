@@ -1,3 +1,23 @@
+[core]
+  excludesfile = ~/.gitignore_global
+[difftool "sourcetree"]
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
+[mergetool "sourcetree"]
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+trustExitCode = true
+[filter "media"]
+  required = true
+  clean = git media clean %f
+  smudge = git media smudge %f
+[filter "hawser"]
+  clean = git hawser clean %f
+  smudge = git hawser smudge %f
+  required = true
+[filter "lfs"]
+  clean = git-lfs clean %f
+  smudge = git-lfs smudge %f
+  required = true
 [color]
     ui = auto
   [color "branch"]
@@ -37,8 +57,9 @@
     pm = pull origin master
     fo = fetch origin
     ps = push origin HEAD
-[user]
-  name = Tyler Naumu
-  email = tyler@procore.com
 [push]
 	default = simple
+[commit]
+	gpgsign = true
+[gpg]
+	program = gpg
