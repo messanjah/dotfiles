@@ -1,3 +1,4 @@
+# ~/.vimrc, harvested on 2019-10-16
 filetype on  " Automatically detect file types.
 set nocompatible  " We don't want vi compatibility.
 
@@ -60,3 +61,5 @@ set mouse=a  " Mouse in all modes
 set backup    " Enable creation of backup file.
 set backupdir=~/.vim/backups " Where backups will go
 set directory=~/.vim/tmp     " Where temporary files will go
+
+au FileType gitcommit set tw=72 spell
