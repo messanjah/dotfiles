@@ -1,4 +1,4 @@
-# OSX ~/.bash_profile harvested 2017-11-27
+# OSX ~/.bash_profile harvested 2019-10-16
 if [ -f ~/.bashrc ]; then
         source ~/.bashrc
 fi
@@ -44,3 +44,11 @@ if [ -f "/usr/local/opt/bash-git-prompt/share/gitprompt.sh" ]; then
   export GIT_PROMPT_ONLY_IN_REPO=1 # Use the default prompt when not in a git repo.
   source "/usr/local/opt/bash-git-prompt/share/gitprompt.sh"
 fi
+
+# asdf version manager
+# https://github.com/asdf-vm/asdf
+export PATH=$PATH:/Users/tylernaumu
+
+. $HOME/.asdf/asdf.sh
+
+. $HOME/.asdf/completions/asdf.bash
