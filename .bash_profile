@@ -1,9 +1,14 @@
-# OSX ~/.bash_profile harvested 2019-10-16
+# OSX, ~/.bash_profile harvested 8/8/23
+# MacOS changed the default shell from bash to zsh in 10.15 (Catalina).
+# https://support.apple.com/en-us/HT208050
+# This envar silences the deprecation warning
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 if [ -f ~/.bashrc ]; then
         source ~/.bashrc
 fi
 export PATH=/usr/local/bin:$PATH
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
+# if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 SSH_ENV="$HOME/.ssh/environment"
 
@@ -32,17 +37,33 @@ GPG_TTY=$(tty)
 export GPG_TTY
 export PINENTRY_USER_DATA="USE_CURSES=1"
 
+# source homebrew env
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
 #bash-completion
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
- . $(brew --prefix)/etc/bash_completion
+# https://docs.brew.sh/Shell-Completion
+if type brew &>/dev/null
+then
+  HOMEBREW_PREFIX="$(brew --prefix)"
+  if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]
+  then
+    source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+  else
+    for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*
+    do
+      [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+    done
+  fi
 fi
 
-if [ -f "/usr/local/opt/bash-git-prompt/share/gitprompt.sh" ]; then
-  __GIT_PROMPT_DIR="/usr/local/opt/bash-git-prompt/share"
+# bash-git-prompt
+# https://formulae.brew.sh/formula/bash-git-prompt
+if [ -f "$HOMEBREW_PREFIX/opt/bash-git-prompt/share/gitprompt.sh" ]; then
+  __GIT_PROMPT_DIR="$HOMEBREW_PREFIX/opt/bash-git-prompt/share"
   export GIT_PROMPT_THEME=Custom
   export GIT_SHOW_UNTRACKED_FILES=no # Don't count untracked files (no, normal, all)
   export GIT_PROMPT_ONLY_IN_REPO=1 # Use the default prompt when not in a git repo.
-  source "/usr/local/opt/bash-git-prompt/share/gitprompt.sh"
+  source "$HOMEBREW_PREFIX/opt/bash-git-prompt/share/gitprompt.sh"
 fi
 
 # asdf version manager
@@ -52,3 +73,23 @@ export PATH=$PATH:/Users/tylernaumu
 . $HOME/.asdf/asdf.sh
 
 . $HOME/.asdf/completions/asdf.bash
+
+# Makefile completions
+# https://stackoverflow.com/questions/4188324/bash-completion-of-makefile-target
+# https://bambowu.github.io/linux/MakefileCompletion/
+complete -W "\`if [ -f Makefile ]; then grep -oE '^[a-zA-Z0-9_-]+:([^=]|$)' Makefile | sed 's/[^a-zA-Z0-9_-]*$//'; elif [ -f makefile ]; then grep -oE '^[a-zA-Z0-9_-]+:([^=]|$)' makefile | sed 's/[^a-zA-Z0-9_-]*$//'; fi \`" make
+
+export HOMEBREW_GITHUB_API_TOKEN=$(cat ~/.homebrew-github-api-token)
+
+alias python=$(brew --prefix)/bin/python3
+
+# ruby-build apparently doesn't use Homebrew's upgraded openssl.
+export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+
+# https://artifacts.procoretech.com/ui/admin/artifactory/user_profile
+# export MY_ART_TOKEN=
+
+export ARTIFACTORY_USERNAME=
+export ARTIFACTORY_PASSWORD=
+export GOPROXY=https://$ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD@artifacts.procoretech.com/artifactory/api/go/golang
+export GONOSUMDB=github.com/procore
