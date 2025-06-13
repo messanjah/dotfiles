@@ -1,11 +1,13 @@
-# OSX ~/.gitconfig, harvested 2019-10-16
+# OSX ~/.gitconfig, harvested 2025-06-13
 [core]
 	excludesfile = ~/.gitignore_global
+  fsmonitor = true
+  untrackedcache = true
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path =
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [filter "media"]
 	required = true
@@ -41,7 +43,7 @@
   [core]
     whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
     autocrlf = false
-	editor = subl -n -w
+	editor = code --wait
 
   [alias]
     aa = add --all --intent-to-add
@@ -60,6 +62,9 @@
     pm = pull origin master
     fo = fetch origin --prune
     ps = push origin HEAD
+    psf = push origin HEAD --force-with-lease
+	alias = config --get-regexp ^alias\\.
+    ph = !git pull origin $(git rev-parse --abbrev-ref HEAD)
 [push]
 	default = simple
 [commit]
@@ -68,6 +73,31 @@
 [gpg]
 	program = gpg
 [merge]
-	conflictstyle = diff3
+	conflictstyle = zdiff3
 [rerere]
 	enabled = true
+	autoupdate = true
+[gui]
+	recentrepo = /Users/tylernaumu/login
+[protocol]
+	version = 2
+[pull]
+	rebase = false
+[url "git@github.com:"]
+  # help golang pull modules via ssh
+  insteadOf = https://github.com/
+# [column]
+# 	ui = auto
+[branch]
+	sort = -committerdate
+[tag]
+	sort = version:refname
+[init]
+	defaultBranch = main
+[diff]
+	algorithm = histogram
+	colorMoved = plain
+	mnemonicPrefix = true
+	renames = true
+[help]
+	autocorrect = prompt
