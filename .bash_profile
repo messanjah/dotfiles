@@ -1,4 +1,4 @@
-# OSX, ~/.bash_profile harvested 8/8/23
+# OSX, ~/.bash_profile harvested 2025-06-13
 # MacOS changed the default shell from bash to zsh in 10.15 (Catalina).
 # https://support.apple.com/en-us/HT208050
 # This envar silences the deprecation warning
@@ -61,18 +61,16 @@ fi
 if [ -f "$HOMEBREW_PREFIX/opt/bash-git-prompt/share/gitprompt.sh" ]; then
   __GIT_PROMPT_DIR="$HOMEBREW_PREFIX/opt/bash-git-prompt/share"
   export GIT_PROMPT_THEME=Custom
-  export GIT_SHOW_UNTRACKED_FILES=no # Don't count untracked files (no, normal, all)
+  export GIT_PROMPT_SHOW_UNTRACKED_FILES=normal # can be no, normal or all; determines counting of untracked files
   export GIT_PROMPT_ONLY_IN_REPO=1 # Use the default prompt when not in a git repo.
   source "$HOMEBREW_PREFIX/opt/bash-git-prompt/share/gitprompt.sh"
 fi
 
 # asdf version manager
-# https://github.com/asdf-vm/asdf
-export PATH=$PATH:/Users/tylernaumu
-
-. $HOME/.asdf/asdf.sh
-
-. $HOME/.asdf/completions/asdf.bash
+# https://asdf-vm.com/
+export ASDF_DATA_DIR="$HOME/.asdf"
+export PATH="$ASDF_DATA_DIR/shims:$PATH"
+. <(asdf completion bash)
 
 # Makefile completions
 # https://stackoverflow.com/questions/4188324/bash-completion-of-makefile-target
@@ -81,15 +79,16 @@ complete -W "\`if [ -f Makefile ]; then grep -oE '^[a-zA-Z0-9_-]+:([^=]|$)' Make
 
 export HOMEBREW_GITHUB_API_TOKEN=$(cat ~/.homebrew-github-api-token)
 
-alias python=$(brew --prefix)/bin/python3
-
 # ruby-build apparently doesn't use Homebrew's upgraded openssl.
 export RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@1.1)"
+# openssl@3 borked install of procore_danger? Tried to install openssl 2.2.2
+# RUBY_CONFIGURE_OPTS="--with-openssl-dir=$(brew --prefix openssl@3)"
 
 # https://artifacts.procoretech.com/ui/admin/artifactory/user_profile
-# export MY_ART_TOKEN=
 
 export ARTIFACTORY_USERNAME=
 export ARTIFACTORY_PASSWORD=
 export GOPROXY=https://$ARTIFACTORY_USERNAME:$ARTIFACTORY_PASSWORD@artifacts.procoretech.com/artifactory/api/go/golang
 export GONOSUMDB=github.com/procore
+
+export AWS_DEFAULT_PROFILE=aws-sso-procoretech
