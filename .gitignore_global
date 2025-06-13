@@ -2,3 +2,4 @@
 .DS_Store
 spec/output
 .tool-versions
+.vscode
