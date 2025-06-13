@@ -1,3 +1,4 @@
+# OSX, ~/.bash_profile harvested 2025-06-13
 # MacOS changed the default shell from bash to zsh in 10.15 (Catalina).
 # https://support.apple.com/en-us/HT208050
 # This envar silences the deprecation warning
